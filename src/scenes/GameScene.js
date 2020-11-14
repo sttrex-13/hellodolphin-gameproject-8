@@ -1,5 +1,5 @@
-let background ;
-let player ;
+let background,foreground ;
+let player1 ;
 let enemy1,enemy1Group,enemy1Event ;
 let enemy2,enemy2Group,enemy2Event ;
 let deathCount = 0 ;
@@ -13,34 +13,59 @@ class GameScene extends Phaser.Scene {
 
     preload() {
         // set background
-        this.load.image('bg','image/sky.png');
-        // set spritesheet
-        this.load.spritesheet('player','image/character.png',{frameWidth: 416,frameHeight:454});
+        this.load.image('background','image/BG Main.png');
+        // set foreground
+        this.load.image('foreground','image/Foreground.png');
+        // set player1
+        this.load.spritesheet('player1','image/player1.png',{frameWidth: 130,frameHeight:130});
+        // set player2
+        this.load.spritesheet('player2','image/player2.png',{frameWidth: 130,frameHeight:130});
         // set enemy1
-        this.load.spritesheet('enemy1','image/enemy1.png',{frameWidth: 2232,frameHeight: 2232});
+        this.load.spritesheet('enemy1','image/enemy1.png',{frameWidth: 128,frameHeight: 128});
         // set enemy2
         this.load.spritesheet('enemy2','image/enemy2.png',{frameWidth: 410,frameHeight: 310});
+        // set time
+        
     }
 
     create() {
         // add background
-        background = this.add.image(300,200,'bg').setScale(5);
+        background = this.add.image(400,300,'background').setScale(0.75);
+        background = this.add.tileSprite(0,0,2000,800,'background').setOrigin(0,0).setScale(0.75);
+
         // movement background
-        background = this.add.tileSprite(0,0,800,600,'bg').setOrigin(0,0);
-        // player
-        player = this.physics.add.sprite(300,800,'player').setScale(0.2);
-        // player animation
+        foreground = this.add.tileSprite(0,0,2000,800,'foreground').setOrigin(0,0).setScale(0.75);
+        
+        // player1
+        player1 = this.physics.add.sprite(300,800,'player1').setScale(1).setSize(90,90);
+        // player1 animation
         this.anims.create({
-            key : 'playerAni',
-            frames: this.anims.generateFrameNumbers('player',{
+            key : 'player1Ani',
+            frames: this.anims.generateFrameNumbers('player1',{
                 start : 0,
-                end : 3
+                end : 4
             }),
-            framerate : 10,
+            framerate : 100,
             repeat : -1
         })
-        // collide player
-        player.setCollideWorldBounds(true);
+        
+        // collide player1
+        player1.setCollideWorldBounds(true);
+
+        // destroy
+        function Destroy(){
+            player1.destroy();
+            deathCount++;
+            console.log(deathCount);
+            enemy1Group.setVelocityX(0);
+            enemy2Group.setVelocityX(0);
+            enemy1Event.paused = true;
+            enemy2Event.paused = true;
+            //gameover = true;
+            //if (gameover){
+            //    alert('Game over!' + ' your death is : ' + deathCount + ' time');
+            //}
+        }
 
         // enemy1
         enemy1 = this.physics.add.sprite(100000,0,'enemy1');
@@ -49,36 +74,31 @@ class GameScene extends Phaser.Scene {
             key : 'enemy1Ani',
             frames: this.anims.generateFrameNumbers('enemy1',{
                 start: 0,
-                end: 2
+                end: 4
             }),
-            framerate : 10,
+            delay : 0.1,
+            framerate : 100,
             repeat : -1
         })
 
         // enemy1 group
         enemy1Group = this.physics.add.group();
 
-        //timeline enemy1
+        //timeline wave1
         enemy1Event = this.time.addEvent({
-            delay:1000,
+            delay: 1500,
             callback: function(){
-                enemy1 = this.physics.add.sprite(800,Math.floor(Math.random() *600),'enemy1').setScale(0.1).setSize(1000,1000).setOffset(550,600);
+                enemy1 = this.physics.add.sprite(800,Math.floor(Math.random() *600),'enemy1').setScale(1).setSize(80,80);
                 enemy1Group.add(enemy1);
-                enemy1Group.setVelocityX(-200);
-                this.physics.add.collider(player,enemy1Group);
-                this.physics.add.overlap(player,enemy1Group,()=>{
-                    player.destroy();
-                    deathCount++;
-                    console.log(deathCount);
-                    enemy1Event.paused = true;
-                    enemy2Event.paused = true;
+                enemy1Group.setVelocityX(-300);
+                this.physics.add.overlap(player1,enemy1Group,()=>{
+                    Destroy();
                 });
             },
             startAt : 1000,
             callbackScope: this,
             loop: true,
             paused: false,
-            repeat: 10
         })
 
         // enemy2
@@ -98,45 +118,48 @@ class GameScene extends Phaser.Scene {
         // enemy2 group
         enemy2Group = this.physics.add.group();
         
-        // timeline enemy2
+        // timeline wave2
         enemy2Event = this.time.addEvent({
-            delay: 3000,
+            delay:120000,
             callback: function(){
                 enemy2 = this.physics.add.sprite(800,Math.floor(Math.random() *600),'enemy2').setScale(0.5).setSize(120,120).setOffset(150,145);
                 enemy2Group.add(enemy2);
-                enemy2Group.setVelocityX(-500);
-                this.physics.add.collider(player,enemy2Group);
-                this.physics.add.overlap(player,enemy2Group,()=>{
-                    player.destroy();
-                    deathCount++;
-                    console.log(deathCount);
-                    enemy1Event.paused = true;
-                    enemy2Event.paused = true;
+                enemy2Group.setVelocityX(-1000);
+                enemy2Event.delay = 2000;
+                this.physics.add.overlap(player1,enemy2Group,()=>{
+                    Destroy();
                 });
             },
-            startAt : 10000,
+            startAt: 1000,
             callbackScope: this,
             loop: true,
-            paused: false,
-            repeat: 10
-            
+            paused: false
         })
+        
     }
 
     update() {
+        
         // background movement
-        background.tilePositionX -= 2
-
-        // controll your player in x and y axis
+        background.tilePositionX += 0.095;
+        foreground.tilePositionX += 2.5;
+        
+        // controll your player1 in x and y axis
         this.input.on('pointermove',(pointer) =>
-        {
-            player.x = pointer.x
-            player.y = pointer.y
-        })
+        {   
+            player1.x = pointer.x
+            player1.y = pointer.y
+        });
 
-         // controll animation
-         player.anims.play('playerAni',true);
-         enemy1.anims.play('enemy1Ani',true);
+        // if keyX is down it's change colorsubmarine
+
+        // controll animation
+        player1.anims.play('player1Ani',true);
+        enemy1.anims.play('enemy1Ani',true);
+        enemy2.anims.play('enemy2Ani',true);
+    }
+    render() {
+        game.debug.text('Elapsed seconds: ' + this.game.time.totalElapsedSeconds(), 32, 32);
     }
 }
 
