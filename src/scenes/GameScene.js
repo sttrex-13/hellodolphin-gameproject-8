@@ -4,6 +4,9 @@ let enemy1,enemy1Group,enemy1Event ;
 let enemy2,enemy2Group,enemy2Event ;
 let deathCount = 0 ;
 let gameover;
+let showDeathCount;
+
+
 
 class GameScene extends Phaser.Scene {
     constructor(test) {
@@ -37,7 +40,11 @@ class GameScene extends Phaser.Scene {
 
         // movement background
         foreground = this.add.tileSprite(0,0,2000,800,'foreground').setOrigin(0,0).setScale(0.75);
-        
+
+        // set time
+        showDeathCount = this.add.text(16,16,"time: 0",{ font: "30px Arial", fill: "#ff2200"});
+        showDeathCount.setText("your death : " + deathCount);
+
         // player1
         player1 = this.physics.add.sprite(300,800,'player1').setScale(1).setSize(90,90);
         // player1 animation
