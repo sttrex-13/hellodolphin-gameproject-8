@@ -159,9 +159,6 @@ class GameScene extends Phaser.Scene {
         enemy1.anims.play('enemy1Ani',true);
         enemy2.anims.play('enemy2Ani',true);
     }
-    render() {
-        game.debug.text('Elapsed seconds: ' + this.game.time.totalElapsedSeconds(), 32, 32);
-    }
 }
 
 export default GameScene;
