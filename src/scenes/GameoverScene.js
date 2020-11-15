@@ -1,6 +1,8 @@
 let bgBlack;
 let text;
 let retrybutton;
+let showDeathCount;
+let deathCount = 0;
 
 class GameoverScene extends Phaser.Scene {
     constructor(test) {
@@ -18,6 +20,9 @@ class GameoverScene extends Phaser.Scene {
         bgBlack = this.add.image(400,500,'bgBlack');
         text = this.add.image(400,100,'text');
         retrybutton = this.add.image(400,500,'retrybutton');
+        deathCount++;
+        showDeathCount = this.add.text(225,250,"your death : 0",{ font: "60px Arial", fill: "#ffffff"});
+        showDeathCount.setText("your death : " + deathCount);
         retrybutton.setInteractive();
         retrybutton.on('pointerup',() => {
             this.scene.start('GameScene');

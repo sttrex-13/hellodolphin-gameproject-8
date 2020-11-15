@@ -42,7 +42,7 @@ class GameScene extends Phaser.Scene {
         foreground = this.add.tileSprite(0,0,2000,800,'foreground').setOrigin(0,0).setScale(0.75);
 
         // set time
-        showDeathCount = this.add.text(16,16,"time: 0",{ font: "30px Arial", fill: "#ff2200"});
+        showDeathCount = this.add.text(16,16,"your death : 0",{ font: "30px Arial", fill: "#ff2200"});
         showDeathCount.setText("your death : " + deathCount);
 
         // player1
@@ -133,7 +133,7 @@ class GameScene extends Phaser.Scene {
         enemy2Event = this.time.addEvent({
             delay:30000,
             callback: function(){
-                enemy2 = this.physics.add.sprite(800,Math.floor(Math.random() *600),'enemy2').setScale(1).setSize(100,100);
+                enemy2 = this.physics.add.sprite(800,Math.floor(Math.random() *600),'enemy2').setScale(1).setSize(80,80);
                 enemy2Group.add(enemy2);
                 enemy2Group.setVelocityX(-1000);
                 enemy2Event.delay = 2000;
