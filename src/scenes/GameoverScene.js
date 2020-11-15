@@ -3,6 +3,7 @@ let text;
 let retrybutton;
 let showDeathCount;
 let deathCount = 0;
+let musicgameover;
 
 class GameoverScene extends Phaser.Scene {
     constructor(test) {
@@ -15,6 +16,8 @@ class GameoverScene extends Phaser.Scene {
         this.load.image('bgBlack','image/GameOverBG.png');
         this.load.image('text','image/GameOverText.png');
         this.load.image('retrybutton','image/RetryButton.png');
+        //upload audio
+        this.load.audio('musicgameover','music/rickroll.mp3');
     }
     create() {
         bgBlack = this.add.image(400,500,'bgBlack');
@@ -26,7 +29,10 @@ class GameoverScene extends Phaser.Scene {
         retrybutton.setInteractive();
         retrybutton.on('pointerup',() => {
             this.scene.start('GameScene');
+            musicgameover.stop();
         });
+        musicgameover = this.sound.add('musicgameover');
+        musicgameover.play();
     }
     update() {
         

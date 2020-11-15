@@ -2,6 +2,7 @@ import 'phaser';
 import GameScene from './scenes/GameScene';
 import GameoverScene from './scenes/GameoverScene';
 import StartScene from './scenes/StartScene';
+import WinScene from './scenes/WinScene';
 
 const config = {
     // For more settings see <https://github.com/photonstorm/phaser/blob/master/src/boot/Config.js>
@@ -14,14 +15,15 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false,
+            debug: true,
             gravity: {x:0}
         }
     },
     scene: [
         StartScene,
         GameoverScene,
-        GameScene
+        GameScene,
+        WinScene
     ]
 };
 

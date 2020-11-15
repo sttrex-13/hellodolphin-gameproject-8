@@ -1,12 +1,12 @@
-let background,foreground ;
+let background,foreground,midground ;
 let player1 ;
 let enemy1,enemy1Group,enemy1Event ;
 let enemy2,enemy2Group,enemy2Event ;
 let deathCount = 0 ;
 let gameover;
 let showDeathCount;
-
-
+let goal,goalGroup,winEvent;
+let musicgame,musicdead;
 
 class GameScene extends Phaser.Scene {
     constructor(test) {
@@ -21,16 +21,19 @@ class GameScene extends Phaser.Scene {
         this.load.image('background','image/BG Main.png');
         // set foreground
         this.load.image('foreground','image/Foreground.png');
+        // set midground
+        this.load.image('midground','image/BG Mid.png');
         // set player1
         this.load.spritesheet('player1','image/player1.png',{frameWidth: 130,frameHeight:130});
-        // set player2
-        this.load.spritesheet('player2','image/player2.png',{frameWidth: 130,frameHeight:130});
         // set enemy1
         this.load.spritesheet('enemy1','image/enemy1.png',{frameWidth: 128,frameHeight: 128});
         // set enemy2
         this.load.spritesheet('enemy2','image/enemy2.png',{frameWidth: 130,frameHeight: 130});
-        // set time
-        
+        // set goal
+        this.load.image('goal','image/Goal.png');
+        // set sound
+        this.load.audio('musicgame','music/underwater.mp3');
+        this.load.audio('musicdead','music/wahwah.mp3');
     }
 
     create() {
@@ -39,11 +42,18 @@ class GameScene extends Phaser.Scene {
         background = this.add.tileSprite(0,0,2000,800,'background').setOrigin(0,0).setScale(0.75);
 
         // movement background
+        midground = this.add.tileSprite(0,0,2000,800,'midground').setOrigin(0,0).setScale(0.75);
         foreground = this.add.tileSprite(0,0,2000,800,'foreground').setOrigin(0,0).setScale(0.75);
-
-        // set time
+        
+        // set deathcount
         showDeathCount = this.add.text(16,16,"your death : 0",{ font: "30px Arial", fill: "#ff2200"});
         showDeathCount.setText("your death : " + deathCount);
+
+        // set music
+        musicgame = this.sound.add('musicgame');
+        musicgame.play();
+
+        musicdead = this.sound.add('musicdead');
 
         // player1
         player1 = this.physics.add.sprite(300,800,'player1').setScale(1).setSize(90,90);
@@ -66,6 +76,8 @@ class GameScene extends Phaser.Scene {
             player1.destroy();
             deathCount++;
             console.log(deathCount);
+            musicdead.play();
+            musicgame.stop();
         //  enemy1Group.setVelocityX(0);
         //  enemy2Group.setVelocityX(0);
         //  enemy1Event.paused = true;
@@ -147,15 +159,36 @@ class GameScene extends Phaser.Scene {
             loop: true,
             paused: false
         })
-        
+
+        //win goal stage
+        goal = this.physics.add.sprite(100000,0,'goal');
+        goalGroup = this.physics.add.group();
+        winEvent = this.time.addEvent({
+            delay: 60000,
+            callback: function(){
+                goal = this.physics.add.sprite(700,300,'goal').setScale(1).setSize(300,600);
+                goalGroup.add(goal);
+                this.physics.add.overlap(player1,goalGroup,()=>{
+                    this.scene.start('WinScene');
+                    alert('Game over!' + ' your total death is : ' + deathCount + ' time');
+                    musicgame.stop();
+                });
+                enemy1Event.paused = true;
+                enemy2Event.paused = true;
+            },
+            callbackScope: this,
+            loop: false,
+            paused: false
+        })
     }
 
     update() {
         
         // background movement
-        background.tilePositionX += 0.095;
+        background.tilePositionX += 0.3;
         foreground.tilePositionX += 2.5;
-        
+        midground.tilePositionX += 1;
+
         // controll your player1 in x and y axis
         this.input.on('pointermove',(pointer) =>
         {   
