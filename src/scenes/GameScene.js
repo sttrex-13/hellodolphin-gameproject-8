@@ -23,7 +23,7 @@ class GameScene extends Phaser.Scene {
         // set enemy1
         this.load.spritesheet('enemy1','image/enemy1.png',{frameWidth: 128,frameHeight: 128});
         // set enemy2
-        this.load.spritesheet('enemy2','image/enemy2.png',{frameWidth: 410,frameHeight: 310});
+        this.load.spritesheet('enemy2','image/enemy2.png',{frameWidth: 130,frameHeight: 130});
         // set time
         
     }
@@ -86,11 +86,12 @@ class GameScene extends Phaser.Scene {
 
         //timeline wave1
         enemy1Event = this.time.addEvent({
-            delay: 1500,
+            delay: 3000,
             callback: function(){
                 enemy1 = this.physics.add.sprite(800,Math.floor(Math.random() *600),'enemy1').setScale(1).setSize(80,80);
                 enemy1Group.add(enemy1);
                 enemy1Group.setVelocityX(-300);
+                enemy1Event.delay = 1000;
                 this.physics.add.overlap(player1,enemy1Group,()=>{
                     Destroy();
                 });
@@ -109,7 +110,7 @@ class GameScene extends Phaser.Scene {
             key : 'enemy2Ani',
             frames: this.anims.generateFrameNumbers('enemy2',{
                 start: 0,
-                end: 7
+                end: 4
             }),
             framerate : 10,
             repeat : -1
@@ -120,9 +121,9 @@ class GameScene extends Phaser.Scene {
         
         // timeline wave2
         enemy2Event = this.time.addEvent({
-            delay:120000,
+            delay:30000,
             callback: function(){
-                enemy2 = this.physics.add.sprite(800,Math.floor(Math.random() *600),'enemy2').setScale(0.5).setSize(120,120).setOffset(150,145);
+                enemy2 = this.physics.add.sprite(800,Math.floor(Math.random() *600),'enemy2').setScale(1).setSize(100,100);
                 enemy2Group.add(enemy2);
                 enemy2Group.setVelocityX(-1000);
                 enemy2Event.delay = 2000;
