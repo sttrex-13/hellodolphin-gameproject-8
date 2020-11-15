@@ -3,10 +3,10 @@ let foreground;
 let logo;
 let button;
 
-class GameScene extends Phaser.Scene {
+class StartScene extends Phaser.Scene {
     constructor(test) {
         super({
-            key: 'GameScene'
+            key: 'StartScene'
         });
     }
 
@@ -21,9 +21,13 @@ class GameScene extends Phaser.Scene {
         foreground = this.add.tileSprite(0,0,2000,800,'fg').setOrigin(0,0).setScale(0.75);
         logo = this.add.image(400,100,'logo');
         button = this.add.image(400,400,'button');
+        button.setInteractive();
+        button.on('pointerup',() => {
+            this.scene.start('GameScene');
+        });
     }
     update() {
         foreground.tilePositionX += 2.5;
     }
 }
-export default GameScene;
+export default StartScene;

@@ -1,28 +1,30 @@
-let bg;
+let bgBlack;
 let text;
-let button;
+let retrybutton;
 
-class GameScene extends Phaser.Scene {
+class GameoverScene extends Phaser.Scene {
     constructor(test) {
         super({
-            key: 'GameScene'
+            key: 'GameoverScene'
         });
     }
 
     preload() {
-        this.load.image('bg','image/GameOverBG.png');
+        this.load.image('bgBlack','image/GameOverBG.png');
         this.load.image('text','image/GameOverText.png');
-        this.load.image('button','image/RetryButton.png');
+        this.load.image('retrybutton','image/RetryButton.png');
     }
     create() {
-        bg = this.add.image(400,100,'bg');
+        bgBlack = this.add.image(400,500,'bgBlack');
         text = this.add.image(400,100,'text');
-        button = this.add.image(400,500,'button');
+        retrybutton = this.add.image(400,500,'retrybutton');
+        retrybutton.setInteractive();
+        retrybutton.on('pointerup',() => {
+            this.scene.start('GameScene');
+        });
     }
     update() {
-        if(button.isDown){
-            
-        }
+        
     }
 }
-export default GameScene;
+export default GameoverScene;

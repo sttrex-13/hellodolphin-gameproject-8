@@ -19,9 +19,9 @@ const config = {
         }
     },
     scene: [
-        //GameScene,
-        //GameoverScene
-        StartScene
+        StartScene,
+        GameoverScene,
+        GameScene
     ]
 };
 

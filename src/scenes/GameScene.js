@@ -3,12 +3,14 @@ let player1 ;
 let enemy1,enemy1Group,enemy1Event ;
 let enemy2,enemy2Group,enemy2Event ;
 let deathCount = 0 ;
+let gameover;
 
 class GameScene extends Phaser.Scene {
     constructor(test) {
         super({
             key: 'GameScene'
         });
+
     }
 
     preload() {
@@ -57,14 +59,14 @@ class GameScene extends Phaser.Scene {
             player1.destroy();
             deathCount++;
             console.log(deathCount);
-            enemy1Group.setVelocityX(0);
-            enemy2Group.setVelocityX(0);
-            enemy1Event.paused = true;
-            enemy2Event.paused = true;
-            //gameover = true;
-            //if (gameover){
-            //    alert('Game over!' + ' your death is : ' + deathCount + ' time');
-            //}
+        //  enemy1Group.setVelocityX(0);
+        //  enemy2Group.setVelocityX(0);
+        //  enemy1Event.paused = true;
+        //  enemy2Event.paused = true;  
+            gameover = true;
+            if (gameover){
+                alert('Game over!' + ' your death is : ' + deathCount + ' time');
+            }
         }
 
         // enemy1
@@ -94,6 +96,7 @@ class GameScene extends Phaser.Scene {
                 enemy1Event.delay = 1000;
                 this.physics.add.overlap(player1,enemy1Group,()=>{
                     Destroy();
+                    this.scene.start('GameoverScene');
                 });
             },
             startAt : 1000,
@@ -129,6 +132,7 @@ class GameScene extends Phaser.Scene {
                 enemy2Event.delay = 2000;
                 this.physics.add.overlap(player1,enemy2Group,()=>{
                     Destroy();
+                    this.scene.start('GameoverScene');
                 });
             },
             startAt: 1000,
@@ -153,6 +157,7 @@ class GameScene extends Phaser.Scene {
         });
 
         // if keyX is down it's change colorsubmarine
+
 
         // controll animation
         player1.anims.play('player1Ani',true);
