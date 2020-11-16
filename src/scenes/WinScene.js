@@ -2,6 +2,7 @@ let backgroundwin;
 let textwin;
 let buttonwin;
 let musicwin;
+let textwinconsole;
 
 class WinScene extends Phaser.Scene {
     constructor(test) {
@@ -19,6 +20,7 @@ class WinScene extends Phaser.Scene {
     create() {
         backgroundwin = this.add.image(400,300,'bgwin').setScale(0.75);
         textwin = this.add.image(400,100,'textwin');
+        textwinconsole = this.add.text(200,275,"your death show in computer\nlet you click f12 and click to console",{ font: "24px Arial", fill: "#ffffff", align: "center"});
         buttonwin = this.add.image(400,500,'buttonwin');
         buttonwin.setInteractive();
         buttonwin.on('pointerup',() => {
