@@ -17,7 +17,7 @@ class GameoverScene extends Phaser.Scene {
         this.load.image('text','image/GameOverText.png');
         this.load.image('retrybutton','image/RetryButton.png');
         //upload audio
-        this.load.audio('musicgameover','music/rickroll.mp3');
+        this.load.audio('musicgameover','music/GameOverBGM.mp3');
     }
     create() {
         bgBlack = this.add.image(400,500,'bgBlack');

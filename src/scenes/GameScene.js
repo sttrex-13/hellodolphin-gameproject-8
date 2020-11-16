@@ -3,7 +3,6 @@ let player1 ;
 let enemy1,enemy1Group,enemy1Event ;
 let enemy2,enemy2Group,enemy2Event ;
 let deathCount = 0 ;
-let gameover;
 let showDeathCount;
 let goal,goalGroup,winEvent;
 let musicgame,musicdead;
@@ -32,8 +31,8 @@ class GameScene extends Phaser.Scene {
         // set goal
         this.load.image('goal','image/Goal.png');
         // set sound
-        this.load.audio('musicgame','music/underwater.mp3');
-        this.load.audio('musicdead','music/wahwah.mp3');
+        this.load.audio('musicgame','music/GameplayBGM.mp3');
+        this.load.audio('musicdead','music/PlayerDiedSFX.wav');
     }
 
     create() {
@@ -82,10 +81,6 @@ class GameScene extends Phaser.Scene {
         //  enemy2Group.setVelocityX(0);
         //  enemy1Event.paused = true;
         //  enemy2Event.paused = true;  
-            gameover = true;
-            if (gameover){
-                alert('Game over!' + ' your death is : ' + deathCount + ' time');
-            }
         }
 
         // enemy1
@@ -166,11 +161,11 @@ class GameScene extends Phaser.Scene {
         winEvent = this.time.addEvent({
             delay: 60000,
             callback: function(){
-                goal = this.physics.add.sprite(700,300,'goal').setScale(1).setSize(300,600);
+                goal = this.physics.add.sprite(1500,300,'goal').setScale(1).setSize(300,600);
                 goalGroup.add(goal);
+                goalGroup.setVelocityX(-200);
                 this.physics.add.overlap(player1,goalGroup,()=>{
                     this.scene.start('WinScene');
-                    alert('Game over!' + ' your total death is : ' + deathCount + ' time');
                     musicgame.stop();
                 });
                 enemy1Event.paused = true;
